@@ -1,1 +1,1 @@
-web: gunicorn -t 150 -c gunicorn_config.py index:app --bind 0.0.0.0:${PORT}
+web: gunicorn index:app

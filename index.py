@@ -4,12 +4,9 @@ from flask_cors import CORS, cross_origin
 # import win32file
 import time
 import os, errno
-from subprocess import Popen
-from flask_socketio import SocketIO
 
 
 app = Flask(__name__)
-socketio = SocketIO(app)
 CORS(app)
 
 # app.config['CORS_HEADERS'] = 'Content-Type', 'access-control-allow-origin'
@@ -21,7 +18,7 @@ abs = []
 
 
 def runAnotherFile():
-    os.system('python3 /home/frddev/Desktop/SaiKumar/Master-Tara-API/db_access.py')
+    os.system('python3 Master-Tara-API/db_access.py')
 
 @app.route('/hello', methods=['GET'])
 def home():
@@ -57,7 +54,7 @@ def home():
 #     return interfaces
 
 @app.route('/interfaces', methods=['POST'])
-# @cross_origin(origin='*',headers=['access-control-allow-origin','Content-Type'])
+@cross_origin()
 def getInterfaces():
     global interfaces
     interfaces = request.json["interfaces"]
@@ -105,7 +102,7 @@ def getInterfaces():
 
 
 @app.route('/filePath', methods=['POST'])
-# @cross_origin(origin='*',headers=['access-control-allow-origin','Content-Type'])
+@cross_origin()
 def getFilePath():
     global filePath
     global abs
@@ -127,15 +124,10 @@ def getInput():
 
 
 @app.route('/checkStatus', methods=['GET'])
-@cross_origin(origin='*',headers=['access-control-allow-origin','Content-Type'])
+@cross_origin()
 def checkStatus():
     # main()
     if getInput() == "YES":
         return "SUCCESS"
     else:
         return "FAILED"
-
-
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    socketio.run(host='0.0.0.0', port=port)
