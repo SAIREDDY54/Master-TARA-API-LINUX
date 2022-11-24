@@ -18,7 +18,7 @@ abs = []
 
 
 def runAnotherFile():
-    os.system('python3 Master-Tara-API/db_access.py')
+    os.system('python3 db_access.py')
 
 @app.route('/hello', methods=['GET'])
 def home():
@@ -80,7 +80,6 @@ def getInterfaces():
     #     print("finished now")
     # finally:
     #     win32file.CloseHandle(pipe)
-    print(interfaces)
     FIFO = "./mypipe"
 
 
@@ -91,11 +90,12 @@ def getInterfaces():
             raise
 
     with open(FIFO, 'w') as f:
-        f.write(str(interfaces))
+        f.write(str(interfaces)+str(sendFilePath()))
     
     runAnotherFile()
 
     # while True:
+    abs.clear()
     
     return interfaces
         
@@ -116,18 +116,11 @@ def sendFilePath():
     return abs
 
 
-def getInput():
-    if (len(interfaces) > 0):
-        return "YES"
-    else:
-        return "NO"
-
-
 @app.route('/checkStatus', methods=['GET'])
 @cross_origin()
 def checkStatus():
     # main()
-    if getInput() == "YES":
+    if (len(interfaces) > 0):
         return "SUCCESS"
     else:
         return "FAILED"

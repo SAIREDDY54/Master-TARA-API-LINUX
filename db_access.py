@@ -18,6 +18,9 @@ import sys
 # import pywintypes
 import os, errno
 
+output = []
+data = ""
+
 dbpath = "/home/frddev/Desktop/SaiKumar/Master-Tara-API/Database3.accdb"
 
 ucanaccess_jars = [
@@ -108,16 +111,18 @@ def fetch_data_from_db():
 FIFO = "mypipe"
 
 def pipe_client():
+    global output
     print("Opening FIFO...")
     with open(FIFO) as fifo:
         print("FIFO opened")
         while True:
+            global data
             data = fifo.read()
             if len(data) == 0:
                 print("Writer closed")
                 break
-            print(data)
-    return data
+            output.append(data)
+    return output
     # print("pipe client")
     # quit = False
     # output = []
